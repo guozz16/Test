@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 """Power flow data for 3 bus, 3 gen case
 """
