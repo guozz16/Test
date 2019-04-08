@@ -7,7 +7,7 @@
 
 from numpy import array
 
-def case30():
+def case2():
     """Power flow data for 30 bus, 6 generator case.
     Please see L{caseformat} for details on the case file format.
 
