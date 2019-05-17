@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -14,15 +13,15 @@ public class DataManager extends JFrame {
 
 		//Initialize data		
 		Data data = new Data();
-		for(int i=0;i<5;i++){
+		for(int i=0;i<50;i++){
 			data.addStudent("Tom"+i,
 				"2016123456","Male",21,"EEA","JiangSu");
 		}
 
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
-		dataController = new DataController(data);
 		dataTableView = new DataTableView(data);
+		dataController = new DataController(data,dataTableView.getTable());
 		contentPane.add("Center",dataTableView);
 		contentPane.add("South",dataController);
 
@@ -38,7 +37,9 @@ public class DataManager extends JFrame {
 		JMenu jMenu = new JMenu("File");
 		jMenu.setMnemonic(KeyEvent.VK_F);
 		JMenuItem jMenuItem = new JMenuItem("Open");
+		KeyStroke ms = KeyStroke.getKeyStroke(KeyEvent.VK_O,InputEvent.CTRL_MASK);
 		jMenuItem.setMnemonic(KeyEvent.VK_O);
+		jMenuItem.setAccelerator(ms);
 		jMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Opened");
@@ -46,7 +47,7 @@ public class DataManager extends JFrame {
 		});
 		jMenu.add(jMenuItem);
 		jMenuItem = new JMenuItem("Save");
-		KeyStroke ms = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_MASK);
+		ms = KeyStroke.getKeyStroke(KeyEvent.VK_S,InputEvent.CTRL_MASK);
 		jMenuItem.setMnemonic(KeyEvent.VK_S);
 		jMenuItem.setAccelerator(ms);
 		jMenuItem.addActionListener(new ActionListener(){

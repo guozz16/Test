@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 public class DataTableView extends AbstractDataView {
 	private StudentTableModel tableModel;
+	private JTable table;
 	public DataTableView (Data data)
 	{
 		super(data);
@@ -12,7 +13,7 @@ public class DataTableView extends AbstractDataView {
 		{"Name","ID","Gender","Age","Department","Origin"};
 		tableModel = new StudentTableModel();
 		tableModel.setStudent(data.viewData());
-		JTable table = new JTable(tableModel);
+		table = new JTable(tableModel);
 		table.getTableHeader().setFont(new Font(null, Font.BOLD, 14));
 		table.getTableHeader().setReorderingAllowed(false);
 		table.setPreferredScrollableViewportSize(new Dimension(1080, 500));
@@ -26,5 +27,9 @@ public class DataTableView extends AbstractDataView {
 
 	public void updateDisplay(){
 		tableModel.setStudent(getData().viewData());
+	}
+
+	public JTable getTable(){
+		return table;
 	}
 }

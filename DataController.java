@@ -1,15 +1,24 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.List;
 
 public class DataController extends JPanel {
 	private Data data;
+	private JTable table;
 	private CardLayout card;
-	public DataController(Data controlledData)
+	private int searchCount;
+	private String searchName;
+	private String searchID;
+	public DataController(Data controlledData,JTable controlledTable)
 	{
 		super();
 		data = controlledData;
+		table = controlledTable;
 		card = new CardLayout();
+		searchCount = 0;
+		searchName = "";
+		searchID = "";
 		setLayout(card);
 		add("Add",buildAddPanel());
 		add("Search",buildSearchPanel());
@@ -56,6 +65,9 @@ public class DataController extends JPanel {
 						department.getText(),
 						origin.getText()
 						);
+						int row = table.getRowCount()-1;
+						table.setRowSelectionInterval(row,row);
+						table.scrollRectToVisible(table.getCellRect(row,0,true));
 					JOptionPane.showMessageDialog(
 						null,
 						"Student information added successfully!","Message",
@@ -78,8 +90,61 @@ public class DataController extends JPanel {
 	}
 	public JPanel buildSearchPanel(){
 		JPanel panel = new JPanel();
-		JButton search = new JButton("Search");
-		panel.add(search);
+		panel.setLayout(new BorderLayout());
+		JPanel searchPanel = new JPanel();
+		JTextField name = new JTextField(10);
+		JTextField id = new JTextField(10);
+		JButton searchButton = new JButton("Search");
+		searchButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				String newSearchName = name.getText();
+				String newSearchID = id.getText();
+				if(newSearchName.length()==0 && 
+					newSearchID.length()==0){
+					JOptionPane.showMessageDialog(
+						null,
+						"Please enter at least one of name and ID","Error",
+						JOptionPane.ERROR_MESSAGE);
+				}
+				else{
+					if(searchName.equals(newSearchName) && 
+						searchID.equals(newSearchID)){
+						searchCount++;
+					}
+					else{
+						searchName=newSearchName;
+						searchID=newSearchID;
+						searchCount=0;
+					}
+					List<Integer> list = data.findStudentWithName(searchName);
+					list.retainAll(data.findStudentWithId(searchID));
+					if(list.size()==0){
+						JOptionPane.showMessageDialog(
+							null,
+							"No student matched.","Warning",
+							JOptionPane.WARNING_MESSAGE);
+					}
+					else if(searchCount==list.size()){
+						searchCount = 0;
+						int row = list.get(0);
+						table.setRowSelectionInterval(row,row);
+						table.scrollRectToVisible(table.getCellRect(row,0,true));
+					}
+					else{
+						int row = list.get(searchCount);
+						table.setRowSelectionInterval(row,row);
+						table.scrollRectToVisible(table.getCellRect(row,0,true));
+					}
+				}
+			}
+		});
+		searchPanel.add(new JLabel("Name:"));
+		searchPanel.add(name);
+		searchPanel.add(new JLabel("ID:"));
+		searchPanel.add(id);
+		searchPanel.add(searchButton);
+		JScrollPane pane = new JScrollPane(searchPanel);
+		panel.add("Center",pane);
 		return panel;
 	}
 	public void showSearchPanel(){
