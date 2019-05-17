@@ -35,14 +35,17 @@ public class Student {
 	public String getName(){
 		return name;
 	}
-	public String getID(){
+	public Integer getID(){
+		return Integer.parseInt(id);
+	}
+	public String getId(){
 		return id;
 	}
 	public String getGender(){
 		return gender;
 	}
-	public String getAge(){
-		return String.valueOf(age);
+	public Integer getAge(){
+		return age;
 	}
 	public String getDepartment(){
 		return department;

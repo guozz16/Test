@@ -85,7 +85,7 @@ public class Data extends Observable {
 	public List<Integer> findStudentWithId(String num){
 		List<Integer> list = new ArrayList<Integer>();
 		for (int i=0;i<data.size();i++){
-			if(data.get(i).getID().indexOf(num)!=-1){
+			if(data.get(i).getId().indexOf(num)!=-1){
 				list.add(i);
 			}
 		}

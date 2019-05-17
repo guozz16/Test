@@ -1,8 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.Component;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.*;
 public class DataTableView extends AbstractDataView {
 	private StudentTableModel tableModel;
 	private JTable table;
@@ -17,9 +16,12 @@ public class DataTableView extends AbstractDataView {
 		table.getTableHeader().setFont(new Font(null, Font.BOLD, 14));
 		table.getTableHeader().setReorderingAllowed(false);
 		table.setPreferredScrollableViewportSize(new Dimension(1080, 500));
+		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tableModel);
+		table.setRowSorter(sorter);
 		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
 		r.setHorizontalAlignment(JLabel.CENTER);
-		table.setDefaultRenderer(Object.class, r);
+		table.setDefaultRenderer(String.class, r);
+		table.setDefaultRenderer(Integer.class, r);
 		JScrollPane scrollPane = new JScrollPane(table);
 		this.setLayout(new BorderLayout());
 		add("Center",scrollPane);

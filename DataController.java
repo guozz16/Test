@@ -66,9 +66,6 @@ public class DataController extends JPanel {
 						department.getText(),
 						origin.getText()
 						);
-						int row = table.getRowCount()-1;
-						table.setRowSelectionInterval(row,row);
-						table.scrollRectToVisible(table.getCellRect(row,0,true));
 					JOptionPane.showMessageDialog(
 						null,
 						"Student information added successfully!","Message",
@@ -156,7 +153,7 @@ public class DataController extends JPanel {
 	public void showSearchPanel(){
 		card.show(this,"Search");
 	}
-	
+
 	public JButton buildDeleteButton(){
 		JButton button = new JButton("Delete");
 		button.registerKeyboardAction(new ActionListener(){

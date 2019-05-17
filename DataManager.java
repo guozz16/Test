@@ -15,7 +15,7 @@ public class DataManager extends JFrame {
 		Data data = new Data();
 		for(int i=0;i<50;i++){
 			data.addStudent("Tom"+i,
-				"2016123456","Male",21,"EEA","JiangSu");
+				"20161234"+i,"Male",i,"EEA","JiangSu");
 		}
 
 		Container contentPane = getContentPane();
