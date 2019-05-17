@@ -64,7 +64,6 @@ public class DataManager extends JFrame {
 		jMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				dataController.showAddPanel();
-				System.out.println("Added");
 			}
 		});
 		jMenu.add(jMenuItem);
@@ -75,21 +74,6 @@ public class DataManager extends JFrame {
 		jMenuItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				dataController.showSearchPanel();
-				System.out.println("Searched");
-			}
-		});
-		jMenu.add(jMenuItem);
-		jMenuItem = new JMenuItem("Update");
-		jMenuItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				System.out.println("Updated");
-			}
-		});
-		jMenu.add(jMenuItem);
-		jMenuItem = new JMenuItem("Delete");
-		jMenuItem.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				System.out.println("Deleted");
 			}
 		});
 		jMenu.add(jMenuItem);
