@@ -66,10 +66,14 @@ public class DataController extends JPanel {
 						department.getText(),
 						origin.getText()
 						);
-					JOptionPane.showMessageDialog(
-						null,
-						"Student information added successfully!","Message",
-						JOptionPane.PLAIN_MESSAGE);
+						int row = table.getRowCount()-1;
+						row=table.convertRowIndexToView(row);
+						table.setRowSelectionInterval(row,row);
+						table.scrollRectToVisible(table.getCellRect(row,0,true));
+						JOptionPane.showMessageDialog(
+							null,
+							"Student information added successfully!","Message",
+							JOptionPane.PLAIN_MESSAGE);
 					}
 				}
 
@@ -127,11 +131,13 @@ public class DataController extends JPanel {
 					else if(searchCount==list.size()){
 						searchCount = 0;
 						int row = list.get(0);
+						row=table.convertRowIndexToView(row);
 						table.setRowSelectionInterval(row,row);
 						table.scrollRectToVisible(table.getCellRect(row,0,true));
 					}
 					else{
 						int row = list.get(searchCount);
+						row=table.convertRowIndexToView(row);
 						table.setRowSelectionInterval(row,row);
 						table.scrollRectToVisible(table.getCellRect(row,0,true));
 					}
@@ -159,6 +165,9 @@ public class DataController extends JPanel {
 		button.registerKeyboardAction(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				int[] rows = table.getSelectedRows();
+				for(int i=0;i<rows.length;i++){
+					rows[i]=table.convertRowIndexToModel(rows[i]);
+				}
 				if(rows[0]==-1){
 					JOptionPane.showMessageDialog(
 						null,
@@ -186,6 +195,9 @@ public class DataController extends JPanel {
 		button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				int[] rows = table.getSelectedRows();
+				for(int i=0;i<rows.length;i++){
+					rows[i]=table.convertRowIndexToModel(rows[i]);
+				}
 				if(rows[0]==-1){
 					JOptionPane.showMessageDialog(
 						null,
@@ -224,6 +236,7 @@ public class DataController extends JPanel {
 				}
 				else{
 					int row = table.getSelectedRow();
+					row = table.convertRowIndexToModel(row);
 					if(row==-1){
 						JOptionPane.showMessageDialog(
 							null,
@@ -254,6 +267,7 @@ public class DataController extends JPanel {
 								break;
 							}
 							data.setStudentName(row,input);
+							row = table.convertRowIndexToView(row);
 							table.setRowSelectionInterval(row,row);
 							table.scrollRectToVisible(table.getCellRect(row,0,true));
 							break;
@@ -273,6 +287,7 @@ public class DataController extends JPanel {
 							}
 							try{
 								data.setStudentId(row,String.valueOf(Integer.parseInt(input)));
+								row = table.convertRowIndexToView(row);
 								table.setRowSelectionInterval(row,row);
 								table.scrollRectToVisible(table.getCellRect(row,0,true));
 							}
@@ -293,6 +308,7 @@ public class DataController extends JPanel {
 							if(input.equals("null"))
 								break;
 							data.setStudentGender(row,input);
+							row = table.convertRowIndexToView(row);
 							table.setRowSelectionInterval(row,row);
 							table.scrollRectToVisible(table.getCellRect(row,0,true));
 							break;
@@ -306,6 +322,7 @@ public class DataController extends JPanel {
 								break;
 							try{
 								data.setStudentAge(row,Integer.parseInt(input));
+								row = table.convertRowIndexToView(row);
 								table.setRowSelectionInterval(row,row);
 								table.scrollRectToVisible(table.getCellRect(row,0,true));
 							}
@@ -324,6 +341,7 @@ public class DataController extends JPanel {
 							if(input==null)
 								break;
 							data.setStudentDepartment(row,input);
+							row = table.convertRowIndexToView(row);
 							table.setRowSelectionInterval(row,row);
 							table.scrollRectToVisible(table.getCellRect(row,0,true));
 							break;
@@ -335,6 +353,7 @@ public class DataController extends JPanel {
 							if(input==null)
 								break;
 							data.setStudentOrigin(row,input);
+							row = table.convertRowIndexToView(row);
 							table.setRowSelectionInterval(row,row);
 							table.scrollRectToVisible(table.getCellRect(row,0,true));
 							break;
