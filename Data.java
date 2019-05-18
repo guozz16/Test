@@ -16,13 +16,27 @@ public class Data extends Observable {
 		}
 		return temp;
 	}
-
+	public Student get(Integer index){
+		return data.get(index);
+	}
+	public void clearData(){
+		data.clear();
+	}
+	public Integer getSize(){
+		return data.size();
+	}
 	//Add student information into data
 	public void addStudent(String name,String id,String gender,
 		int age,String department,String origin){
 		data.add(new Student(name,id,gender,age,department,origin));
 		setChanged();
 		notifyObservers();
+	}
+	public void addStudentFromString(String str){
+		String[] ss = str.split("\\|");
+		addStudent(ss[0],ss[1],ss[2],
+			Integer.parseInt(ss[3]),
+			ss[4],ss[5]);
 	}
 	//Delete student by index
 	public void delStudent(int i){
@@ -91,6 +105,4 @@ public class Data extends Observable {
 		}
 		return list;
 	}
-
-
 }

@@ -54,7 +54,7 @@ public class Student {
 		return origin;
 	}
 	public String toString(){
-		String temp = name+" "+id+" "+gender+" "+age+" "+department+" "+origin;
+		String temp = name+"|"+id+"|"+gender+"|"+age+"|"+department+"|"+origin;
 		return temp;
 	}
 
