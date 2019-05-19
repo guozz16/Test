@@ -379,7 +379,7 @@ public class DataController extends JPanel {
 						Object[] genderOptions = {"Male","Female"};
 						input = String.valueOf(JOptionPane.showInputDialog(
 							null,
-							"Please enter the new gender:\n","Input",
+							"Please select the new gender:\n","Input",
 							JOptionPane.PLAIN_MESSAGE,null,genderOptions,genderOptions[0]));
 						if(input.equals("null"))
 							break;
