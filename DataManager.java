@@ -62,10 +62,6 @@ public class DataManager extends JFrame {
 							data.addStudentFromString(str);
 						}
 						reader.close();
-						JOptionPane.showMessageDialog(
-							null,
-							"Data is successfully loaded!","Message",
-							JOptionPane.PLAIN_MESSAGE);
 					}
 					catch(Exception except){
 						JOptionPane.showMessageDialog(
@@ -103,10 +99,6 @@ public class DataManager extends JFrame {
 						}
 						out.close();
 						fileWriter.close();
-						JOptionPane.showMessageDialog(
-							null,
-							"Data is successfully saved!","Message",
-							JOptionPane.PLAIN_MESSAGE);
 					}
 					catch(IOException except){
 						System.err.println("IOException");
