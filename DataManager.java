@@ -153,6 +153,7 @@ public class DataManager extends JFrame {
 		return jMenuBar;
 	}
 	public static void main(String args[]){
+		System.out.println(System.getProperty("java.version"));
 		DataManager m = new DataManager();
 	}
 }
