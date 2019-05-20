@@ -154,6 +154,5 @@ public class DataManager extends JFrame {
 	}
 	public static void main(String args[]){
 		DataManager m = new DataManager();
-		
 	}
 }

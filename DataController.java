@@ -32,13 +32,13 @@ public class DataController extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		JPanel addPanel = new JPanel();
-		JTextField name = new JTextField(10);
-		JTextField id = new JTextField(10);
+		final JTextField name = new JTextField(10);
+		final JTextField id = new JTextField(10);
 		String[] choice = {"Male","Female"};
-		JComboBox gender = new JComboBox(choice);
-		JTextField age = new JTextField(4);
-		JTextField department = new JTextField(10);
-		JTextField origin = new JTextField(10);
+		final JComboBox gender = new JComboBox(choice);
+		final JTextField age = new JTextField(4);
+		final JTextField department = new JTextField(10);
+		final JTextField origin = new JTextField(10);
 		JButton addButton = new JButton("Add");
 		addPanel.add(new JLabel("Add Student:"));
 		addPanel.add(name);
@@ -115,8 +115,8 @@ public class DataController extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		JPanel searchPanel = new JPanel();
-		JTextField name = new JTextField(10);
-		JTextField id = new JTextField(10);
+		final JTextField name = new JTextField(10);
+		final JTextField id = new JTextField(10);
 		JButton searchButton = new JButton("Search");
 		searchButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -190,8 +190,8 @@ public class DataController extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		JPanel filterPanel = new JPanel();
-		JTextField include = new JTextField(10);
-		JTextField exclude = new JTextField(10);
+		final JTextField include = new JTextField(10);
+		final JTextField exclude = new JTextField(10);
 		JButton filterButton = new JButton("Filter");
 		JButton resetButton = new JButton("Reset");
 		filterPanel.add(new JLabel("Include:"));
@@ -327,8 +327,21 @@ public class DataController extends JPanel {
 						null,
 						"Select an item to update:\n","Select Item",
 						JOptionPane.PLAIN_MESSAGE,null,options,options[0]));
-					switch(select){
-						case "Name":
+					int selectInt = 0;
+					if(select.equals("Name"))
+						selectInt = 1;
+					else if(select.equals("ID"))
+						selectInt = 2;
+					else if(select.equals("Gender"))
+						selectInt = 3;
+					else if(select.equals("Age"))
+						selectInt = 4;
+					else if(select.equals("Department"))
+						selectInt = 5;
+					else if(select.equals("Origin"))
+						selectInt = 6;
+					switch(selectInt){
+						case 1:
 						String input = JOptionPane.showInputDialog(
 							null,
 							"Please enter the new name:\n","Input",
@@ -347,7 +360,7 @@ public class DataController extends JPanel {
 						table.setRowSelectionInterval(row,row);
 						table.scrollRectToVisible(table.getCellRect(row,0,true));
 						break;
-						case "ID":
+						case 2:
 						input = JOptionPane.showInputDialog(
 							null,
 							"Please enter the new ID:\n","Input",
@@ -375,7 +388,7 @@ public class DataController extends JPanel {
 						}
 						break;
 
-						case "Gender":
+						case 3:
 						Object[] genderOptions = {"Male","Female"};
 						input = String.valueOf(JOptionPane.showInputDialog(
 							null,
@@ -389,7 +402,7 @@ public class DataController extends JPanel {
 						table.scrollRectToVisible(table.getCellRect(row,0,true));
 						break;
 
-						case "Age":
+						case 4:
 						input = JOptionPane.showInputDialog(
 							null,
 							"Please enter the new age:\n","Input",
@@ -409,7 +422,7 @@ public class DataController extends JPanel {
 								JOptionPane.ERROR_MESSAGE);
 						}
 						break;
-						case "Department":
+						case 5:
 						input = JOptionPane.showInputDialog(
 							null,
 							"Please enter the new deparment:\n","Input",
@@ -421,7 +434,7 @@ public class DataController extends JPanel {
 						table.setRowSelectionInterval(row,row);
 						table.scrollRectToVisible(table.getCellRect(row,0,true));
 						break;
-						case "Origin":
+						case 6:
 						input = JOptionPane.showInputDialog(
 							null,
 							"Please enter the new origin:\n","Input",
