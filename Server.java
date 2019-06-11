@@ -11,17 +11,12 @@ import java.awt.event.ItemListener;
 import java.util.*;
 import java.util.List;
 public class Server extends JFrame{
-	ServerSocket server;
-	Vector<Socket> socketList;
 	Vector<String> clientList;
 	JComboBox comboBox;
 	AllDataPanel allDataPanel;
-	ObjectInputStream is1;
-	ObjectInputStream is2;
-	PrintWriter os;
 	Vector<DataPanel> dataPanelList;
-	Vector<MapObjRegister> registerList;
 	ControllPanel controllPanel;
+	HashMap<String, Integer> flagList;
 
 	public static void main(String args[]) {
 		Server myServer = new Server();
@@ -29,13 +24,9 @@ public class Server extends JFrame{
 
 	public Server(){
 		super("Server");
-		is1=null;
-		is2=null;
-		os=null;
 		clientList = new Vector<String>();
-		socketList = new Vector<Socket>();
-		registerList = new Vector<MapObjRegister>();
 		dataPanelList = new Vector<DataPanel>();
+		flagList = new HashMap<String,Integer>();
 		Container contentPane = getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		allDataPanel = new AllDataPanel();
@@ -46,20 +37,10 @@ public class Server extends JFrame{
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
-		ClientThread td1 = new ClientThread(4700,"Client1",is1);
-		ClientThread td2 = new ClientThread(2000,"Client2",is2);
+		ClientThread td1 = new ClientThread(4700,"Client1");
+		ClientThread td2 = new ClientThread(2000,"Client2");
 		td1.start();
 		td2.start();
-	}
-	public void freshAll(){
-		removeAll();
-		repaint();
-		Container contentPane = getContentPane();
-		contentPane.setLayout(new BorderLayout());
-		contentPane.add("North",comboBox);
-        contentPane.add("Center",controllPanel);
-		contentPane.add("South",allDataPanel);
-		revalidate();
 	}
 
 	class AllDataPanel extends JPanel{
@@ -120,15 +101,10 @@ public class Server extends JFrame{
 			JButton button = new JButton("Request");
 			button.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					Integer index = comboBox.getSelectedIndex();
-					try{
-						os = new PrintWriter(socketList.get(index).getOutputStream());
-						os.println("Send");
-						os.flush();
+					String clientName = comboBox.getSelectedItem().toString();
+					if(clientList.contains(clientName)){
+						flagList.put(clientName,1);
 					}
-					catch(Exception ee){
-						ee.printStackTrace();
-					}	
 				}
 			});
 			return button;
@@ -152,7 +128,6 @@ public class Server extends JFrame{
 	        {
 	            dataPanelList.get(index).remove(checkList.indexOf(jcb.getText()));
 	        }
-
 	    }
 	}
 
@@ -204,15 +179,14 @@ public class Server extends JFrame{
 			revalidate();
 		}
 	}
-	public boolean connect(Integer port, ObjectInputStream is, PrintWriter os,
-		MapObjRegister register, Socket socket){
+	public void connect(Integer port, ObjectInputStream is, PrintWriter os,
+		MapObjRegister register, Socket socket,String clientName){
 		try {
-			server = null;
+			ServerSocket server = null;
 			try {
 				server = new ServerSocket(port);
 			} catch (Exception e) {
 				System.out.println("can not listen to: " + e);
-				return false;
 			}
 
 			try {
@@ -220,20 +194,21 @@ public class Server extends JFrame{
 				System.out.println("connected client: " +
 				socket.getInetAddress() + socket.getPort());
 			} catch (Exception e) {
-				System.out.println("Error." + e);
-				return false;
+				e.printStackTrace();
 			}
 
 			Object obj;
 			is = new ObjectInputStream(socket.getInputStream());
 			os = new PrintWriter(socket.getOutputStream());
+
 			if((obj=is.readObject())!=null && obj.equals("start")){
 				Object objType = null;
 				Object key = null;
+				//Start to initialize data
 				while(true){
 					if((objType=is.readObject())!=null){
 						if(objType.equals("finish"))
-							return true;
+							break;
 						else if((key=is.readObject())!=null){
 							if((obj=is.readObject())!=null){
 								String temp = obj.toString();
@@ -249,11 +224,50 @@ public class Server extends JFrame{
 					}
 				}
 			}
-		} catch (Exception e) {
-			System.out.println("Error:" + e);
-			return false;
+			//finish data initialization
+			DataPanel tempPanel = new DataPanel(register);
+			dataPanelList.add(tempPanel);
+			allDataPanel.addDataPanel(clientName,tempPanel);
+			allDataPanel.showDataPanel(clientName);
+			tempPanel.fresh();
+			clientList.add(clientName);
+			flagList.put(clientName,0);
+			//Start to fresh data
+			while(true){
+				if(flagList.get(clientName)==1){
+					System.out.println("Request");
+					os.println("Send");
+					os.flush();
+					flagList.put(clientName,0);
+				}
+				if((obj=is.readObject())!=null && obj.equals("start")){
+					Object objType = null;
+					Object key = null;
+					while(true){
+						if((objType=is.readObject())!=null){
+							if(objType.equals("finish"))
+								break;
+							else if((key=is.readObject())!=null){
+								if((obj=is.readObject())!=null){
+									String temp = obj.toString();
+									String[] strs = temp.substring(1,temp.length()-1).split(", ");
+									HashMap m = new HashMap();
+									for(String s : strs){
+										String[]ms = s.split("=");
+										m.put(ms[0],ms[1]);
+									}
+									register.removeDataObj(key.toString(),objType.toString());
+									register.addDataObj(key.toString(),objType.toString(),m);
+								}
+							}
+						}
+					}
+				}
+			}	
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
 		}
-		return true;
 	}
 	class ClientThread extends Thread
 	{
@@ -262,61 +276,18 @@ public class Server extends JFrame{
 		private Socket socket;
 		private String clientName;
 		private ObjectInputStream is;
-		public ClientThread(Integer port,String clientName,ObjectInputStream is)
+		private PrintWriter os;
+		public ClientThread(Integer port,String clientName)
 		{
 			super();
 			this.port = port;
 			this.register = new MapObjRegister();
 			this.socket = new Socket();
-			socketList.add(this.socket);
-			registerList.add(this.register);
 			this.clientName = clientName;
-			this.is = is;
 		}
 		public void run()
 		{
-			try
-			{
-				if(connect(port,is,os,register,socket)){
-					DataPanel temp = new DataPanel(register);
-					dataPanelList.add(temp);
-					allDataPanel.addDataPanel(clientName,temp);
-					allDataPanel.showDataPanel(clientName);
-					temp.fresh();
-					clientList.add(clientName);
-				}
-				Object obj=null;
-				while(true){
-					if((obj=is.readLine())!=null && obj.equals("start")){
-						System.out.println("Start to fresh...");
-						Object objType = null;
-						Object key = null;
-						while(true){
-							if((objType=is.readObject())!=null){
-								if(objType.equals("finish"))
-									break;
-								else if((key=is.readObject())!=null){
-									if((obj=is.readObject())!=null){
-										String temp = obj.toString();
-										String[] strs = temp.substring(1,temp.length()-1).split(", ");
-										HashMap m = new HashMap();
-										for(String s : strs){
-											String[]ms = s.split("=");
-											m.put(ms[0],ms[1]);
-										}
-										register.removeDataObj(key.toString(),objType.toString());
-										register.addDataObj(key.toString(),objType.toString(),m);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			catch(Exception e)
-			{
-				
-			}
+			connect(port,is,os,register,socket,clientName);
 		}
 	}
 }

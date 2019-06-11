@@ -15,12 +15,12 @@ public class Client extends JFrame {
 	BufferedReader is;
 	ObjectOutputStream os;
 	String fname;
-	static Integer port = 2000;
+	static Integer port = 4700;
 	static Boolean flag = false;
 	static MapObjRegister register = new MapObjRegister();
 	private static String serverHost = "127.0.0.1";//the IP address"183.172.212.200"
 	public static void main(String args[]) {
-		Client c = new Client("变电站2");
+		Client c = new Client("变电站1");
 	}
 
 	public Client(String name){
@@ -242,7 +242,7 @@ public class Client extends JFrame {
 			while (true)
 			{
 				try{
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 					readData(fname);
 					if(flag)
 						sendData();
@@ -265,8 +265,11 @@ public class Client extends JFrame {
 				String line;
 				try{
 					if((line=is.readLine())!=null){
-						if(line.equals("Send"))
+						if(line.equals("Send")){
+							readData(fname);
 							sendData();
+							System.out.println("Send");
+						}
 					}
 				}
 				catch (Exception e)

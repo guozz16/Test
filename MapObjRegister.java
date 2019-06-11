@@ -91,8 +91,8 @@ public class MapObjRegister extends Observable{
 		if (objMaps == null)  return false;
 		if (!objMaps.containsKey(objKey)) return false;
 		objMaps.remove(objKey);
-		setChanged();
-		notifyObservers();
+		// setChanged();
+		// notifyObservers();
 		return true;
 	}
 
@@ -102,8 +102,8 @@ public class MapObjRegister extends Observable{
 		if (objMaps == null)  return false;
 		if (!objMaps.containsKey(objKey)) return false;
 		objMaps.remove(objKey);
-		setChanged();
-		notifyObservers();
+		// setChanged();
+		// notifyObservers();
 		return true;
 	}
 
