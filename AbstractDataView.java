@@ -5,19 +5,19 @@ import javax.swing.JPanel;
 
 public abstract class AbstractDataView extends JPanel 
 implements Observer {
-	private Data data;
+	private MapObjRegister register;
 
-	public AbstractDataView(Data observableData) 
+	public AbstractDataView(MapObjRegister observableRegister) 
 	throws NullPointerException
 	{
-		if (observableData == null)
+		if (observableRegister == null)
 			throw new NullPointerException();
-		data = observableData;
-		data.addObserver(this);
+		register = observableRegister;
+		register.addObserver(this);
 	}
 
-	public Data getData(){
-		return data;
+	public MapObjRegister getData(){
+		return register;
 	}
 
 	protected abstract void updateDisplay();
