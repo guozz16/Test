@@ -28,6 +28,7 @@ public class Interface extends JFrame
 	}
 	public Interface()
 	{
+		super("电力系统潮流计算可视化工具");
 		cd=new CardLayout();
 		panelvolt = new JLabel();
 		panelpower = new JLabel();
@@ -81,7 +82,7 @@ public class Interface extends JFrame
 		container.add(panelcard,"South");
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(990,850);
+		setSize(980,820);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		try

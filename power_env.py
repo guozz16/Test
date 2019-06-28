@@ -1,6 +1,6 @@
 import numpy as np 
 from pypower.api import ppoption, runpf
-from case import case
+from case2 import case
 import networkx as nx  
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
